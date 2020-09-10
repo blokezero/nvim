@@ -1,0 +1,19 @@
+{
+  "coc.preferences.jumpCommand": "SplitIfNotOpen4COC",
+  "intelephense.licenceKey": "00MCDI0MZG58XA3",
+  "intelephense.diagnostics.undefinedFunctions": false,
+  "languageserver": {
+    "intelephense": {
+      "command": "intelephense",
+      "args": ["--stdio"],
+      "filetypes": ["php"],
+      "initializationOptions": {
+        "storagePath": "/tmp/intelephense",
+        "licenceKey": "00MCDI0MZG58XA3",
+        "stubs": [
+          "/home/asullivan/web-apps/asullivan-1/src/vendor/composer/"
+        ]
+      }
+    }
+  }
+}
