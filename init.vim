@@ -40,9 +40,6 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'justinmk/vim-dirvish'
 Plug 'pbrisbin/vim-mkdir'
 Plug 'kristijanhusak/vim-dirvish-git'
-Plug 'prettier/vim-prettier', {
-      \ 'do': 'yarn install',
-      \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 
 " Fuzzy finder
 Plug 'junegunn/fzf', { 'do': './install --bin' }
@@ -255,6 +252,17 @@ let g:fzf_buffers_jump = 1
 " [[B]Commits] Customize the options used by 'git log':
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
 
+" Add a ripgrep only search
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
 " ------ lightline ------
 set laststatus=2
 set noshowmode
@@ -421,7 +429,7 @@ let g:neoformat_basic_format_retab = 1
 let g:neoformat_basic_format_trim = 1
 
 " ---- PRETTIER ----
-nmap <Leader>pf <Plug>(Prettier)
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 " ------- File type specific
 
@@ -515,6 +523,9 @@ nmap <leader>rn <Plug>(coc-rename)
 " Formatting selected code.
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
+
+" coc-yank
+nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
 
 augroup mygroup
   autocmd!
